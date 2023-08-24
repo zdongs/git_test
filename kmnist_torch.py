@@ -6,38 +6,6 @@ from torchvision.transforms import ToTensor
 
 # import matplotlib.pyplot as plt
 
-# 下载的数据集文件默认保存到当前用户工作目录的data子目录中。
-# 下载路径：root
-# 例如"D:\\datasets\\fashionMNIST\\"一类的绝对路径
-training_data = datasets.KMNIST(
-    root="D:\ProgramData\data",
-    train=True,
-    download=False,
-    transform=ToTensor()
-)
-
-
-test_data = datasets.KMNIST(
-    root="D:\ProgramData\data",
-    train=False,
-    download=False,
-    transform=ToTensor()
-)
-
-batch_size = 128
-
-train_dataloader = DataLoader(
-    training_data,  # 数据集对象，如 torch.utils.data.Dataset 的实例
-    batch_size=batch_size,  # 批次大小，即每次加载的样本数
-    shuffle=True,  # 是否在每个 epoch 时对数据进行洗牌
-    pin_memory=True,  # 是否将加载的数据放入 CUDA 固定内存中（适用于 GPU 训练）
-)
-
-test_dataloader = DataLoader(test_data, batch_size=batch_size)
-
-# 检验可以使用的设备
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"尊敬的主人mgzn，这是您使用的设备：{device}")
 
 # 定义神经网络模型
 class NeuralNetwork(nn.Module):
@@ -95,6 +63,32 @@ def test(dataloader, model, loss_fn):
 
 
 if __name__ == "__main__":
+    # 下载的数据集文件默认保存到当前用户工作目录的data子目录中。
+    # 下载路径：root
+    # 例如"D:\\datasets\\fashionMNIST\\"一类的绝对路径
+    training_data = datasets.KMNIST(
+        root="D:\ProgramData\data", train=True, download=False, transform=ToTensor()
+    )
+
+    test_data = datasets.KMNIST(
+        root="D:\ProgramData\data", train=False, download=False, transform=ToTensor()
+    )
+
+    batch_size = 128
+
+    train_dataloader = DataLoader(
+        training_data,  # 数据集对象，如 torch.utils.data.Dataset 的实例
+        batch_size=batch_size,  # 批次大小，即每次加载的样本数
+        shuffle=True,  # 是否在每个 epoch 时对数据进行洗牌
+        pin_memory=True,  # 是否将加载的数据放入 CUDA 固定内存中（适用于 GPU 训练）
+    )
+
+    test_dataloader = DataLoader(test_data, batch_size=batch_size)
+
+    # 检验可以使用的设备
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"尊敬的主人mgzn，这是您使用的设备：{device}")
+
     mymodel = NeuralNetwork(28 * 28, 512, 10).to(device)  # 转到gpu
 
     loss_fn = nn.CrossEntropyLoss()
@@ -109,10 +103,10 @@ if __name__ == "__main__":
         print(
             f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n"  # noqa: E501
         )
-        if correct >= 0.8:
+        if correct >= 0.9:
             break
 
     print("训练完成!")
 
-    # 保存完整模型（包括权重和结构）
-    torch.save(mymodel, "complete_model.pth")
+    # 保存模型（权重）
+    torch.save(mymodel.state_dict(), "kmnist_model.pth")
