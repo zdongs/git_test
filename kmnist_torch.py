@@ -10,18 +10,18 @@ from torchvision.transforms import ToTensor
 # 下载路径：root
 # 例如"D:\\datasets\\fashionMNIST\\"一类的绝对路径
 training_data = datasets.KMNIST(
-    root="data",
+    root="D:\ProgramData\data",
     train=True,
     download=False,
-    transform=ToTensor(),
+    transform=ToTensor()
 )
 
 
 test_data = datasets.KMNIST(
-    root="data",
+    root="D:\ProgramData\data",
     train=False,
     download=False,
-    transform=ToTensor(),
+    transform=ToTensor()
 )
 
 batch_size = 128
@@ -40,8 +40,6 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"尊敬的主人mgzn，这是您使用的设备：{device}")
 
 # 定义神经网络模型
-
-
 class NeuralNetwork(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(NeuralNetwork, self).__init__()
