@@ -37,6 +37,7 @@ def train(dataloader, model, loss_fn, optimizer):
         loss = loss_fn(pred, y)  # 计算损失
 
         # 反向传播 Backpropagation
+        # 问题！！
         model.zero_grad()  # 重置模型中参数的梯度值为0
         loss.backward()  # 计算梯度
         optimizer.step()  # 更新模型中参数的梯度值
