@@ -41,12 +41,13 @@ def train(dataloader, model, loss_fn, optimizer):
         model.zero_grad()  # 重置模型中参数的梯度值为0
         loss.backward()  # 计算梯度
         optimizer.step()  # 更新模型中参数的梯度值
+        # model.zero_grad()  # 重置模型中参数的梯度值为0
 
         if batch % 100 == 0:
             loss, current = loss.item(), batch * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
-
+@torch.no_grad()
 def test(dataloader, model, loss_fn):
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
