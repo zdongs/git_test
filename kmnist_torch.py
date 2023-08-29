@@ -3,6 +3,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+from tqdm import tqdm
 
 # import matplotlib.pyplot as plt
 
@@ -17,7 +18,7 @@ class NeuralNetwork(nn.Module):
             nn.ReLU(),  # 隐藏层的非线性单元
             nn.Linear(hidden_size, hidden_size),
             nn.ReLU(),
-            nn.Linear(hidden_size, num_classes),  # 输出层
+            nn.Linear(hidden_size, num_classes)  # 输出层
         )
 
     def forward(self, x):
@@ -26,10 +27,11 @@ class NeuralNetwork(nn.Module):
         return out
 
 
-def train(dataloader, model, loss_fn, optimizer):
-    size = len(dataloader.dataset)  # 训练数据样本总量
+def train(dataloader, model, loss_fn, optimizer, device):
+    # size = len(dataloader.dataset)  # 训练数据样本总量
     model.train()  # 设置模型为训练模式
-    for batch, (X, y) in enumerate(dataloader):
+    tpbar = tqdm(dataloader)
+    for batch, (X, y) in enumerate(tpbar):
         X, y = X.to(device), y.to(device)  # 张量加载到设备
 
         # 计算预测的误差
@@ -37,18 +39,20 @@ def train(dataloader, model, loss_fn, optimizer):
         loss = loss_fn(pred, y)  # 计算损失
 
         # 反向传播 Backpropagation
-        # 问题！！
         model.zero_grad()  # 重置模型中参数的梯度值为0
         loss.backward()  # 计算梯度
         optimizer.step()  # 更新模型中参数的梯度值
-        # model.zero_grad()  # 重置模型中参数的梯度值为0
 
-        if batch % 100 == 0:
-            loss, current = loss.item(), batch * len(X)
-            print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+        tpbar.set_description(
+            f'batch:{batch:>5d} loss:{loss.item():>7f}'
+            )
+        # if batch % 100 == 0:
+        #     loss, current = loss.item(), batch * len(X)
+        #     print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
-@torch.no_grad()
-def test(dataloader, model, loss_fn):
+
+# @torch.no_grad()
+def test(dataloader, model, loss_fn, device):
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
     model.eval()  # 模型设置为评估模式，代码等效于 model.train(False)
@@ -89,7 +93,7 @@ if __name__ == "__main__":
 
     # 检验可以使用的设备
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"尊敬的主人mgzn，这是您使用的设备：{device}")
+    print(f"这是您使用的设备：{device}")
 
     mymodel = NeuralNetwork(28 * 28, 512, 10).to(device)  # 转到gpu
 
@@ -100,8 +104,11 @@ if __name__ == "__main__":
     while True:
         t += 1
         print(f"Epoch {t}\n-------------------------------")
-        train(train_dataloader, mymodel, loss_fn, optimizer)
-        test_loss, correct = test(test_dataloader, mymodel, loss_fn)
+        train(
+            train_dataloader, mymodel, loss_fn, optimizer, device
+        )
+        
+        test_loss, correct = test(test_dataloader, mymodel, loss_fn, device)
         print(
             f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n"  # noqa: E501
         )
@@ -111,4 +118,4 @@ if __name__ == "__main__":
     print("训练完成!")
 
     # 保存模型（权重）
-    torch.save(mymodel.state_dict(), "kmnist_model.pth")
+    torch.save(mymodel.state_dict(), "models/kmnist_model.pth")
