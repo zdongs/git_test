@@ -23,7 +23,7 @@ test_loader = DataLoader(dataset_test,batch)
 mymodel = AlexNet()
 
 loss_fn = nn.CrossEntropyLoss()
-opti = optim.Adam(mymodel.parameters(),0.05)
+opti = optim.Adam(mymodel.parameters())
 
 best_accuracy = 0
 
