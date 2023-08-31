@@ -20,7 +20,7 @@ train_loader = DataLoader(dataset_train,batch_size=batch,shuffle=True)
 test_loader = DataLoader(dataset_test,batch)
 
 # 模型构建
-mymodel = AlexNet()
+mymodel = AlexNet().to(device)
 
 loss_fn = nn.CrossEntropyLoss()
 opti = optim.Adam(mymodel.parameters())
@@ -58,6 +58,6 @@ for e in range(epochs):
     print(f'loss:{test_loss} Accuracy:{correct*100:>4f}%')
 
     if correct > best_accuracy:
-        save(mymodel,'models/alexnet_CIFAR10.pth')
+        save(mymodel,'git_test/models/alexnet_CIFAR10.pth')
         
 print('训练完成！')
