@@ -35,11 +35,11 @@ for X, y in test_loader:
 correct /= size
 best_accuracy = correct
 
-e = 15
+e = 17
 # 运算
 while True:
     e += 1
-    # tpbar = tqdm(train_loader)
+    #tpbar = tqdm(train_loader)
     tpbar = train_loader
     mymodel.train()
     for batch, (X, y) in enumerate(tpbar):
@@ -50,9 +50,10 @@ while True:
         loss.backward()
         opti.step()
         mymodel.zero_grad()
-
-        # tpbar.set_description(f"epoch:{e} batch:{batch+1:>5d} loss:{loss.item():>7f}")
-    print(f"epoch:{e} batch:{batch+1:>5d} loss:{loss.item():>7f}")
+        if batch % 40 == 0:
+            print(f"epoch:{e} batch:{batch+1:>5d} loss:{loss.item():>7f}")
+        # if batch % 20 == 0:
+        #     tpbar.set_description(f"epoch:{e} batch:{batch+1:>5d} loss:{loss.item():>7f}")
     mymodel.eval()
     test_loss, correct = 0, 0
     size = len(test_loader.dataset)
