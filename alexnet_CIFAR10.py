@@ -12,8 +12,8 @@ device = 'cuda' if cuda.is_available() else 'cpu'
 transform = Compose([ToTensor(),ColorJitter((1,10),(1,10),(1,10),(0.2,0.4))])
 
 # 数据准备
-dataset_train = CIFAR10(root='models',transform=transform,download = True)
-dataset_test = CIFAR10(root='models',transform=transform,download=True,train=False)
+dataset_train = CIFAR10(root='D:\ProgramData\data',transform=transform,download = True)
+dataset_test = CIFAR10(root='D:\ProgramData\data',transform=transform,download=True,train=False)
 
 # 数据封装
 train_loader = DataLoader(dataset_train,batch_size=batch,shuffle=True)
@@ -23,7 +23,7 @@ test_loader = DataLoader(dataset_test,batch)
 mymodel = AlexNet()
 
 loss_fn = nn.CrossEntropyLoss()
-opti = optim.Adam(mymodel.parameters(),0.05)
+opti = optim.Adam(mymodel.parameters())
 
 best_accuracy = 0
 
