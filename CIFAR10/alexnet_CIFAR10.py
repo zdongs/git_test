@@ -2,7 +2,7 @@ from torch import nn, cuda, no_grad, optim, save
 from torch.utils.data import DataLoader
 from torchvision.datasets import CIFAR10
 from torchvision.transforms import ToTensor,Compose,ColorJitter
-from alexnet import AlexNet
+from myfunction.alexnet import AlexNet
 from tqdm import tqdm
 
 batch = 128
@@ -12,8 +12,8 @@ device = 'cuda' if cuda.is_available() else 'cpu'
 transform = Compose([ToTensor(),ColorJitter((1,10),(1,10),(1,10),(0.2,0.4))])
 
 # 数据准备
-dataset_train = CIFAR10(root='D:\ProgramData\data',transform=transform,download = True)
-dataset_test = CIFAR10(root='D:\ProgramData\data',transform=transform,download=True,train=False)
+dataset_train = CIFAR10(root='data',transform=transform,download = True)
+dataset_test = CIFAR10(root='data',transform=transform,download=True,train=False)
 
 # 数据封装
 train_loader = DataLoader(dataset_train,batch_size=batch,shuffle=True)

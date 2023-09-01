@@ -2,8 +2,8 @@ from torch import nn, cuda, no_grad, optim, save, load
 from torch.utils.data import DataLoader
 from torchvision.datasets import CIFAR10
 from torchvision.transforms import ToTensor, Compose, ColorJitter
-from alexnet import AlexNet
-from tqdm import tqdm
+from myfunction.alexnet import AlexNet  # noqa: F401
+# from tqdm import tqdm
 
 batch = 128
 device = "cuda" if cuda.is_available() else "cpu"
@@ -53,7 +53,7 @@ while True:
         if batch % 40 == 0:
             print(f"epoch:{e} batch:{batch+1:>5d} loss:{loss.item():>7f}")
         # if batch % 20 == 0:
-        #     tpbar.set_description(f"epoch:{e} batch:{batch+1:>5d} loss:{loss.item():>7f}")
+        #     tpbar.set_description(f"epoch:{e} batch:{batch+1:>5d} loss:{loss.item():>7f}")  # noqa: E501
     mymodel.eval()
     test_loss, correct = 0, 0
     size = len(test_loader.dataset)
@@ -85,5 +85,5 @@ with open("git_test/models/best_training_summary.txt", "w") as f:
     f.write(f"最终测试损失值: {test_loss:.4f}\n")
     f.write("训练完成！")
 
-print("训练总结已保存到 training_summary.txt 文件中")
+print("训练总结已保存到 best_training_summary.txt 文件中")
 

@@ -10,16 +10,16 @@ class CNN(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv_ReLU_stack = nn.Sequential(
-            nn.Conv2d(1, 10, 3),
+            nn.Conv2d(1, 10, 3, 1, 1),
             nn.ReLU(),
-            nn.Conv2d(10, 20, 3),
+            nn.Conv2d(10, 20, 3, 1, 1),
             nn.ReLU(),
             nn.MaxPool2d(2, 2),
             nn.Dropout2d(0.2),
             nn.Flatten(),
-            nn.Linear(2880, 100),
+            nn.Linear(3920, 128),
             nn.ReLU(),
-            nn.Linear(100, 10),
+            nn.Linear(128, 10),
         )
 
     def forward(self, x):
@@ -31,11 +31,11 @@ if __name__ == "__main__":
     device = "cuda" if cuda.is_available() else "cpu"
 
     training_data = datasets.KMNIST(
-        root="D:\ProgramData\data", train=True, download=False, transform=ToTensor()
+        root="data", train=True, download=False, transform=ToTensor()
     )
 
     test_data = datasets.KMNIST(
-        root="D:\ProgramData\data", train=False, download=False, transform=ToTensor()
+        root="data", train=False, download=False, transform=ToTensor()
     )
 
     batch_size = 128
@@ -57,8 +57,9 @@ if __name__ == "__main__":
     for epoch in range(epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
         train(train_dataloader, mymodel, loss_fn, optimizer, device)
+
     test_loss, correct = test(test_dataloader, mymodel, loss_fn, device)
     print(
         f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n"  # noqa: E501
     )
-    save(mymodel, "models/kmnist_conv.pth")
+    save(mymodel, "git_test/models/kmnist_conv.pth")

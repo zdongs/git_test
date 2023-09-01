@@ -73,11 +73,11 @@ if __name__ == "__main__":
     # 下载路径：root
     # 例如"D:\\datasets\\fashionMNIST\\"一类的绝对路径
     training_data = datasets.KMNIST(
-        root="D:\ProgramData\data", train=True, download=False, transform=ToTensor()
+        root="data", train=True, download=False, transform=ToTensor()
     )
 
     test_data = datasets.KMNIST(
-        root="D:\ProgramData\data", train=False, download=False, transform=ToTensor()
+        root="data", train=False, download=False, transform=ToTensor()
     )
 
     batch_size = 128

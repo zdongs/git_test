@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 
 
 training_data = datasets.KMNIST(
-    root="D:\ProgramData\data", train=True, download=False, transform=ToTensor()
+    root="data", train=True, download=False, transform=ToTensor()
 )
 
 test_data = datasets.KMNIST(
-    root="D:\ProgramData\data", train=False, download=False, transform=ToTensor()
+    root="data", train=False, download=False, transform=ToTensor()
 )
 
 for img,lbl in training_data:
