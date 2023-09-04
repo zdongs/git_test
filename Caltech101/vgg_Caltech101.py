@@ -2,7 +2,7 @@ from torchvision.models import vgg11_bn
 from torch.utils.data import DataLoader
 from torchvision.datasets import Caltech101
 from torchvision import transforms
-from torch import nn,optim
+from torch import nn,optim,save
 # from tqdm import tqdm
 import sys
 sys.path.append('D:/demodesk/git_test')
@@ -17,10 +17,9 @@ from kmnist.kmnist_torch import train
 4. 重新训练模型
 '''
 
-batch_size = 16
-epochs = 10
+batch_size = 8
+epochs = 5
 device = devices()
-best_acc = 0
 
 # 定制经典模型结构（加载预训练参数）
 mymodel = vgg11_bn(weights = 'DEFAULT')
@@ -70,3 +69,5 @@ optims = optim.Adam(mymodel.parameters())
 for e in range(epochs):
     print(f'epoch:{e+1:>2d}')
     train(data_loader,mymodel,loss_fn,optims,device)
+
+    save(mymodel,'git_test/models/vgg_Caltech101.pth')
