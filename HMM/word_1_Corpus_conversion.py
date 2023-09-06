@@ -33,7 +33,8 @@ def line_w(line):
             t2.append("E")
     return t1, t2
 
-def main(input_file = "data/pku_training.utf8",output_file = "data/corpus.data"):
+
+def main(input_file="data/pku_training.utf8", output_file="data/corpus.data"):
     corpus = []
 
     with open(input_file, "r", encoding="utf-8") as f:
@@ -41,11 +42,11 @@ def main(input_file = "data/pku_training.utf8",output_file = "data/corpus.data")
             line = line.strip().split()
             if line:
                 t1, t2 = line_w(line)
-                corpus.append((t1,t2))  
-
+                corpus.append((t1, t2))
 
     with open(output_file, "wb") as f:
         pickle.dump(corpus, f)
+
 
 if __name__ == "__main__":
     main()

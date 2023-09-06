@@ -6,6 +6,8 @@ corpus --> (tokens,tags)
 2. A：错位方式，为每行列表创建一个副本，通过加#的方式使两个列表错位，从而定位到前后状态转移的数量并计算占比
 3. B：观测值即为字符，统计每个字符在每个tag中的出现次数并计算其在每个tag中的占比
 """
+
+
 def mle_train(corpus, entity_tags):
     v_pi = {}  # 初始状态概率向量
     m_A = {}  # 状态转移概率矩阵
@@ -55,19 +57,19 @@ if __name__ == "__main__":
     from hmm_forward import index_map, trans_matrix, trans_vector, HMM
 
     input_file = "data/corpus-2014.data"
-    out_file = 'git_test/models/hmm_2014.pth'
+    out_file = "git_test/models/hmm_2014.pth"
 
     with open(input_file, "rb") as f:
         corpus = pickle.load(f)
 
-    states = list('BMES')
+    states = list("BMES")
     states_id2lable, states_lable2id = index_map(states)
 
     v_pi, m_A, m_B = mle_train(corpus, states)
 
     v_pi = trans_vector(v_pi, states_lable2id)
     m_A = trans_matrix(m_A, states_lable2id, states_lable2id)
-    m_B = {states_lable2id[k]:v for k,v in m_B.items()}
-    hmm = HMM(v_pi,m_A,m_B)
-    with open(out_file,'bw') as f:
-        pickle.dump(hmm,f)
+    m_B = {states_lable2id[k]: v for k, v in m_B.items()}
+    hmm = HMM(v_pi, m_A, m_B)
+    with open(out_file, "bw") as f:
+        pickle.dump(hmm, f)
