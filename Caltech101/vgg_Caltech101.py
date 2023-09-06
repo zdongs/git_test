@@ -4,7 +4,7 @@ from torchvision.datasets import Caltech101
 from torchvision import transforms
 from torch import nn,optim,save
 # from tqdm import tqdm
-import sys
+import sys,os
 sys.path.append('D:/demodesk/git_test')
 
 from myfunction.cudas import devices
