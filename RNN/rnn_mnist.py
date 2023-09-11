@@ -3,12 +3,12 @@ from torch.utils.data import DataLoader
 from torchvision.transforms import ToTensor
 from torch import nn, optim, save, no_grad
 from rnn_models import RNN_Model
-import sys,os
-
+import sys, os
 myfunction_dire = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(myfunction_dire)
 from myfunction.cudas import devices
 from tqdm import tqdm
+from torchmetrics.classification import MulticlassAccuracy
 
 train_sets = KMNIST(root="data", train=True, transform=ToTensor())
 test_sets = KMNIST(root="data", train=False, transform=ToTensor())
@@ -57,19 +57,17 @@ for epoch in range(epochs):
     model.eval()
     nums = len(test_dataloader.dataset)
     num_batchs = len(test_dataloader)
-    correct, test_loss = 0, 0
+    accuracy = MulticlassAccuracy(10).to(device)
+
     # 不使用梯度更新
     with no_grad():
         for X, y in test_dataloader:
             X, y = X.to(device), y.to(device)
             X = X.reshape(-1, 28, 28)
             pred = model(X)
-            test_loss += loss_fn(pred, y).item()
-            correct += (pred.argmax(1) == y).sum().item()
-        # 平均损失和准确率
-        test_loss /= num_batchs
-        correct /= nums
-    print(f"avg loss:{test_loss:.4f} correct:{(correct *100):.2f}%")
+            accuracy(pred, y)
+        correct = accuracy.compute()
+    print(f"correct:{(correct *100):.2f}%")
 
 
 save(model, "git_test/models/rnn_kmnist.pth")
